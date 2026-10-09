@@ -2,18 +2,21 @@
 %global __os_install_post %{nil}
 %global _build_id_links none
 
+%global upstream_tag 260930.1
+%global payload_release 1
+%global payload_distro el10
+
 Name:           qcom-sensors-ship
 Version:        2.0.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Prebuilt Qualcomm Sensors-ship libraries and services
-License:        Proprietary
-URL:            http://support.cdmatech.com
-Source0:        qcom-sensors-ship-2.0.1_1.el10.aarch64.tar.gz
+License:        LicenseRef-Qualcomm-nologin-binaries-license
+Source0: https://qartifactory-edge.qualcomm.com/artifactory/qsc_releases/software/chip/component/sensors.lnx.0.0/%{upstream_tag}/prebuilt_rpm/%{name}-%{version}_%{payload_release}.%{payload_distro}.aarch64.tar.gz
 ExclusiveArch:  aarch64
 
 %description
 Prebuilt Qualcomm Sensors-ship libraries, services, configuration files, and
- test components. This package-only spec repackages the binary payload from
+test components. This package-only spec repackages the binary payload from
 Source0 and does not compile source code.
 
 %package -n qcom-sensors-registry
@@ -39,6 +42,7 @@ Development files for the Sensors API.
 %package -n qcom-sensors-core
 Summary:        Qualcomm Sensors-core runtime libraries
 Requires:       qmi-framework%{?_isa}
+Requires:       nanopb%{?_isa}
 Requires:       qcom-sensing-hub%{?_isa}
 Requires:       qcom-sensors-api%{?_isa} = %{version}-%{release}
 %description -n qcom-sensors-core
@@ -71,6 +75,7 @@ Development files for the Sensors services libraries.
 Summary:        Qualcomm Sensors test-core runtime libraries
 Requires:       qcom-sensors-api%{?_isa} = %{version}-%{release}
 Requires:       qcom-sensors-core%{?_isa} = %{version}-%{release}
+Requires:       protobuf%{?_isa}
 %description -n qcom-sensors-test-core
 Runtime Sensors test-core libraries.
 
@@ -87,6 +92,7 @@ Summary:        Qualcomm Sensors test applications
 Requires:       qcom-sensors-api%{?_isa} = %{version}-%{release}
 Requires:       qcom-sensors-core%{?_isa} = %{version}-%{release}
 Requires:       qcom-sensors-test-core%{?_isa} = %{version}-%{release}
+Requires:       qcom-libdiag%{?_isa} >= 1.0.5-1
 %description -n qcom-sensors-test-apps
 Prebuilt Sensors test applications.
 
@@ -254,8 +260,5 @@ echo '===== END GENERATED RPM FILE LISTS ====='
 %files -n qcom-sensors-test-apps-devel -f %{_builddir}/qcom-sensors-prebuilt-manifests/test-apps.devel
 
 %changelog
-* Wed Sep 23 2026 QGenie <qgenie@qti.qualcomm.com> - 2.0.1-1.nodiag
-- Repackage the prebuilt Sensors-ship payload.
-- Remove stale build-ID links and include generated license files.
-- Include sensors-registry.pc in the registry runtime package.
-- Exclude protobuf, NanoPB, and libtool archive payloads.
+* Thu Oct 8 2026 mmritunj@qti.qualcomm.com - 2.0.1-1
+- Initial RPM packaging-only release for the prebuilt Sensors-ship payload.
